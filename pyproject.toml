@@ -1,0 +1,52 @@
+[project]
+name = "telegram-bot-hosting-saas"
+version = "0.1.0"
+description = "Production-grade Telegram bot hosting SaaS backend"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn[standard]==0.34.0",
+  "pydantic==2.10.5",
+  "pydantic-settings==2.7.1",
+  "python-multipart==0.0.20",
+  "sqlalchemy[asyncio]==2.0.37",
+  "asyncpg==0.30.0",
+  "alembic==1.14.1",
+  "redis[hiredis]==5.2.1",
+  "docker==7.1.0",
+  "httpx==0.28.1",
+  "pyjwt==2.10.1",
+  "passlib[bcrypt]==1.7.4",
+  "python-slugify==8.0.4",
+  "pyrogram==2.0.106",
+  "tgcrypto==1.2.5",
+  "structlog==25.1.0",
+  "python-json-logger==3.2.1",
+  "sentry-sdk==2.20.0",
+  "orjson==3.10.14",
+  "tenacity==9.0.0",
+  "psutil==6.1.1",
+  "aiofiles==24.1.0",
+  "apscheduler==3.11.0",
+  "aiosqlite==0.20.0",
+  "email-validator==2.2.0"
+]
+
+[tool.uv]
+dev-dependencies = [
+  "pytest==8.3.4",
+  "pytest-asyncio==0.25.2",
+  "ruff==0.9.2",
+  "mypy==1.14.1"
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"

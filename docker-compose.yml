@@ -1,0 +1,71 @@
+services:
+  api:
+    build: .
+    container_name: void-vortex-api
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./deployments:/var/lib/void-vortex/deployments
+      - ./logs:/var/lib/void-vortex/logs
+
+  deploy-worker:
+    build: .
+    container_name: void-vortex-deploy-worker
+    command: ["python", "-m", "app.workers.deploy_worker"]
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./deployments:/var/lib/void-vortex/deployments
+      - ./logs:/var/lib/void-vortex/logs
+
+  watchdog-worker:
+    build: .
+    container_name: void-vortex-watchdog-worker
+    command: ["python", "-m", "app.workers.watchdog_worker"]
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  controller-bot:
+    build: .
+    container_name: void-vortex-controller
+    command: ["python", "-m", "app.bot.controller"]
+    env_file:
+      - .env
+    depends_on:
+      - api
+
+  db:
+    image: postgres:16
+    container_name: void-vortex-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: void_vortex
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: void-vortex-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  pg_data:
